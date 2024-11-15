@@ -7,18 +7,27 @@ import ast
 nd = NameDataset()
 
 
-# Extract the first item of a dictionary
-def extract_first_genre(genre_dict):
-    if isinstance(genre_dict, dict):
-        return next(iter(genre_dict.values()), None)
-    return None
+def string2dict(data: str) -> dict:
+    """Convert a string representation of a dictionary to a dictionary
+    Args:
+        data (str): The string representation of a dictionary
+    Returns:
+        dict: The dictionary
+    """
+    return ast.literal_eval(data)
 
-# Extract all the items of a disctionary into a list
-def extract_all_genres(genre_dict):
-    if isinstance(genre_dict, dict):
-        # Récupère toutes les valeurs du dictionnaire
-        return list(genre_dict.values())
-    return None
+
+def extract_all_genres(data: str) -> list:
+    """Extract all genres from a string representation of a dictionary
+    Args:
+        data (str): The string representation of a dictionary
+    Returns:
+        list: The list of genres"""
+    data_list = []
+    for key,value in string2dict(data).items():
+        data_list.append(value)
+    return data_list
+
 
 #We create a function to extract the first name of an actor
 def split_name(full_name : str) -> str:
@@ -32,6 +41,7 @@ def split_name(full_name : str) -> str:
     
     f_name = parts[0] if parts else ''
     return f_name
+
 
 #We create a function to deduce the gender based on the actor's first name
 def get_gender(name : str) -> str:
