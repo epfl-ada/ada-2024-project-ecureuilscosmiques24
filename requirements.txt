@@ -1,6 +1,0 @@
-os
-pandas
-numpy
-matplotlib
-seaborn
-names-dataset
