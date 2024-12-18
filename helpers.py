@@ -166,5 +166,28 @@ def plot_sse(features_X, start=2, end=10):
     ax.plot(sse.k, sse.sse)
     ax.set_xlabel("K")
     ax.set_ylabel("Sum of Squared Errors")
+    ax.set_title("Sum of squared error depending on k")
     plt.show()
     return ax
+
+
+def min_max_scaling(data):
+    """
+    Set the maximum of the data to 1 and the minimum to 0
+    Args:
+    data: the data we want to scale
+    Returns
+    scaled_data
+    """
+    data_max = np.max(data)
+    data_min = np.min(data)
+    scaled_data = (data-data_min)/(data_max-data_min)
+    return scaled_data
+
+
+def computediff(prop1,prop2): 
+    return np.abs(prop1-prop2)
+
+
+def compute_similarity(prop1,prop2):
+    return 1-np.abs(prop1-prop2)
