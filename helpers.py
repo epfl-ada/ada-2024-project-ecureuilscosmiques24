@@ -191,3 +191,31 @@ def computediff(prop1,prop2):
 
 def compute_similarity(prop1,prop2):
     return 1-np.abs(prop1-prop2)
+
+
+def write_formula(label:str, numerical_features:list, categorical_features:list, exclude_cat:str = "Region") -> str:
+    formula_reg = [" + C("+cat+")" for cat in categorical_features if exclude_cat not in cat]
+    formula_reg = label + " ~ "
+    for i,num in enumerate(numerical_features):
+        formula_reg += " + " if i!=0 else ""
+        formula_reg += num
+    
+    formula_cat = [" + C("+cat+")" for cat in categorical_features if exclude_cat not in cat]
+
+    for cat in formula_cat:
+        formula_reg += cat
+
+    return formula_reg
+
+
+def gen25(year):
+    if 1900<year<=1925:
+        return "1900-1925"
+    if 1925<year<=1950:
+        return "1925-1950"
+    if 1950<year<=1975:
+        return "1950-1975"
+    if 1975<year<=2000:
+        return "1975-2000"
+    if 2000<year<= 2025:
+        return "2000-2020"
