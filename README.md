@@ -41,7 +41,7 @@ A dataset associating the country with its code (FRA for France, etc) is used fo
 2. Because of the large number of movie genres and the different genres associated to each movies, we did clustering to associate movies that have similar genres by "exploding" the genre list of each movie in a dataframe and treating them as features to cluster movies with close enough features together (the number of clusters was chosen according to the silouhette score and the SSE). A heatmap of the aggregated genres for each cluster was plotted to visualize which genres were dominant in each cluster. This allowed us to understand the distribution of genres across clusters.
 3. The sizes of actors are rescaled for each gender based on the mean height of men and women respectively.
 4. The box office is also rescaled in order to have comparable prices for different epochs. It was done by using the CPI dataset and the following formula : 
-/[ Price_{scaled} = \frac{Price_{X}}{CPI_X} CPI_{1984}/] 
+\( Price_{scaled} = \frac{Price_{X}}{CPI_X} CPI_{1984}\) 
 5. We plot the proportion of male and female across the years to have a first idea about the evolution. 
 6. With the new genres obtained by clustering, we plot the distribution of male and female per genre. 
 
