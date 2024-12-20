@@ -37,10 +37,10 @@ A dataset associating the country with its code (FRA for France, etc) is used fo
 3. Data Reconstruction: Missing actor gender information was reconstructed using a gender inference process based on the Facebook dataset. By analyzing actor names, genders were associated with a certainty threshold of 0.85.  
 
 ### Task 2 : additionnal treatments of the data and first plots
-1. We grouped the countries per region using the *county_to_region* function, that associates the country given to the region containing this country in its list for the spatial analysis.
+1. We grouped the countries per region using the *country_to_region* function, that associates the country given to the region containing this country in its list for the spatial analysis.
 2. Because of the large number of movie genres and the different genres associated to each movies, we did clustering to associate movies that have similar genres by "exploding" the genre list of each movie in a dataframe and treating them as features to cluster movies with close enough features together (the number of clusters was chosen according to the silouhette score and the SSE). A heatmap of the aggregated genres for each cluster was plotted to visualize which genres were dominant in each cluster. This allowed us to understand the distribution of genres across clusters.
 3. The sizes of actors are rescaled for each gender based on the mean height of men and women respectively.
-4. The box office is also rescaled in order to have comparable prices for different epochs. It was done by using the CPI dataset and the following formula : 
+4. The box office is also rescaled in order to have comparable prices for different epochs. It was done by using the [CPI dataset](https://fred.stlouisfed.org/series/CPIAUCNS#0) and the following formula : 
  Price<sub>scaled</sub> = (Price<sub>X</sub> / CPI<sub>X</sub>) × CPI<sub>1984</sub>
 5. We plot the proportion of male and female across the years to have a first idea about the evolution. 
 6. With the new genres obtained by clustering, we plot the distribution of male and female per genre. 
