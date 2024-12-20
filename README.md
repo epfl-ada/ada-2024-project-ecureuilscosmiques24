@@ -41,7 +41,7 @@ A dataset associating the country with its code (FRA for France, etc) is used fo
 2. Because of the large number of movie genres and the different genres associated to each movies, we did clustering to associate movies that have similar genres by "exploding" the genre list of each movie in a dataframe and treating them as features to cluster movies with close enough features together (the number of clusters was chosen according to the silouhette score and the SSE). A heatmap of the aggregated genres for each cluster was plotted to visualize which genres were dominant in each cluster. This allowed us to understand the distribution of genres across clusters.
 3. The sizes of actors are rescaled for each gender based on the mean height of men and women respectively.
 4. The box office is also rescaled in order to have comparable prices for different epochs. It was done by using the CPI dataset and the following formula : 
-\( Price_{scaled} = \frac{Price_{X}}{CPI_X} CPI_{1984}\) Price<sub>scaled</sub> = (Price<sub>X</sub> / CPI<sub>X</sub>) × CPI<sub>1984</sub>
+ Price<sub>scaled</sub> = (Price<sub>X</sub> / CPI<sub>X</sub>) × CPI<sub>1984</sub>
 5. We plot the proportion of male and female across the years to have a first idea about the evolution. 
 6. With the new genres obtained by clustering, we plot the distribution of male and female per genre. 
 
@@ -57,9 +57,7 @@ This section describes the spatial analysis conducted in the project. The analys
 4. Female proportions in movies (`F_prop_movies`) are computed for each generation and region/country using the `get_proportion()` function.
 5. The datasets are merged to create a combined dataset with the following columns: `Country`, `ISO`, `F_prop_population`, `F_prop_movies`
 6. A representativity index is calculated using the formula:
-  \[
-  \text{Representativity} = \left(\frac{\text{F_prop_movies}}{\text{F_prop_population}} - 1\right)
-  \]
+Representativity = ((F<sub>prop_movies</sub> / F<sub>prop_population</sub>) - 1)
 Positive index means overrepresentation of female actors in movies compared to their proportion in population while negative index means an underrepresentation.
 7. For countries with sufficient data over three generations (1950–1975, 1975–2000, 2000–2020), the net evolution of representativity is calculated. It's the representativity of the last generation minus the one of the first generation.
 8. Using the JSON file, a world map is plotted with four layers: one layer for each generation and one layer showing the net evolution of representativity.
