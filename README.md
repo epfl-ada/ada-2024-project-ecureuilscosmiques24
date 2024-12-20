@@ -69,10 +69,10 @@ Positive index means overrepresentation of female actors in movies compared to t
 ### Task 5 : Matching and balancing genders 
 1. Logistic regression and propensity score calculation: we build a logistic regression model using the **statsmodels** library to calculate propensity scores for each actor. The calculated propensity scores are stored.
 2. Quantifying uncertainty: we extract the model coefficients, p-values, standard errors, and confidence intervals to assess the significance of features. Coefficients with 95% CI are visualized to interpret the model results.
-3. Grouping and matching by propensity score: actors are grouped by name, and the mean propensity score is calculated for each group. A subset of the data is sampled, and male and female actors are matched based on their propensity scores using a graph-matching algorithm.
+3. Grouping and matching by propensity score: actors are grouped by name, and the mean propensity score is calculated for each actor to keep one occurence of each actor. Male and female actors are then matched based on their propensity scores using a graph-matching algorithm.
 4. Reconstructing features: after matching, the script reconstructs the dataset to include only matched actors. This ensures that the subsequent analysis is performed on balanced groups.
-5. Visualization: Apparition Densities Before and After Matching: density plots are generated to compare apparition counts by gender before and after matching. These plots provide a visual representation of gender distribution changes due to matching.
-6. Statistical testing for gender representation: A t-test is conducted to assess whether there is a statistically significant difference in apparition counts between male and female actors after matching.
+5. Visualization: density plots are generated to compare apparition counts by gender before and after matching. These plots provide a visual representation of gender distribution changes due to matching.
+6. Statistical testing for gender representation: a t-test is conducted to assess whether there is a statistically significant difference in apparition counts between male and female actors after matching.
 
 ### Task 6 : Matching and balancing movies with balanced and unbalanced casts in gender
 1. Data Preparation:
@@ -84,8 +84,8 @@ Extracted and visualized model coefficients, p-values, and confidence intervals 
 3. Matching balanced and unbalanced movies: used a graph-based matching algorithm to pair balanced and unbalanced movies with similar propensity scores.
 Evaluated matching quality by the number of successful matches.
 4. Visualizing box office revenue distribution: 
-- Before matching: Created density plots to compare box office revenues for balanced and unbalanced movies.
-- After matching: Re-plotted box office revenue distributions for matched groups, ensuring comparable groups.
+- Before matching: density plots to compare box office revenues for balanced and unbalanced movies.
+- After matching: now that we have comparable groups of movies, we re-plot the box office revenue distributions for the matched groups.
 
 
 ## Organization
