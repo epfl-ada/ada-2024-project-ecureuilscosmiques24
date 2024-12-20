@@ -11,6 +11,8 @@ In the movie industry, a lot of norms exist and they could change from country t
 Therefore an analysis should be done to assess those norms and to understand to what extent they impact movie creation and what are their potential causes.
 Mentalities also evolve with time and analyzing those different standards of evolution is necessary.
 
+Here is the website of our [datastory](https://baptistecarmier.github.io/)
+
 ## Research questions
 1. How has the gender distribution evolved over decades ?
 2. What are the biases present ?
