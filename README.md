@@ -11,95 +11,90 @@ In the movie industry, a lot of norms exist and they could change from country t
 Therefore an analysis should be done to assess those norms and to understand to what extent they impact movie creation and what are their potential causes.
 Mentalities also evolve with time and analyzing those different standards of evolution is necessary.
 
+Here is the website of our [datastory](https://baptistecarmier.github.io/)
+
 ## Research questions
-1. How has the gender distribution across different movie genres evolved over decades ? Do certain genres have historically been more male or female-dominated ?
-2. Is the actor's age influenced by the movie genre ? Does age influence the movie success (box office revenue for identical genres) ?
-3. Are there specific regions where women are under or over represented in the movie industry ? If yes, does it change with time ?
-4. Does the proportion of women per country of production correspond to the demography of that country ?
-5. Does a balanced or unbalanced representation of gender lead to more successful movies ?
-6. What biases are present ?
-7. Can we predict the proportion of women using all the parameters that were used for the analysis with an ML model ?
+1. How has the gender distribution evolved over decades ?
+2. What are the biases present ?
+3. Do certain movie genres have historically been more male or female-dominated ?
+4. Are there specific regions where women are under or over represented in the movie industry ? If yes, does it change with time ?
+5. Does the proportion of women per country of production correspond to the demography of that country ?
+6. Which gender have greater chances to be selected multiple times in movie casts ?
+7. Does a balanced or unbalanced representation of gender lead to more successful movies ?
 
-## Proposed additional datasets
+## Additional datasets
 
-- *name-dataset*: To address missing gender information,
-we use the `names-dataset` Python library, sourced from a GitHub repository ([here](https://github.com/philipperemy/name-dataset)).
-Based on a Facebook leak, it provides likely gender classifications for first names,
-helping us infer actors' genders as male or female. Install it via: `pip install names-dataset`
+For this project we mainly used the [CMU Movie Summary Corpus](https://www.cs.cmu.edu/~ark/personas/), which contains 42,306 movie plot summaries, sourced from Wikipedia. It also provides metadata for each movie such as title, release years, box office revenue, etc. The dataset also includes characters' characteristics and actors' labels such as gender, age, ethnicity, etc.
 
-- To analyze country-level gender representation in films,
-we use demographic data from the [Our World in Data Population & Demography Explorer](https://ourworldindata.org/explorers/population-and-demography).
-This dataset provides the male and female population for selected countries from 1950 to 2023,
-enabling us to compare movie industry gender representation with actual demographic distributions. 
+In parallel, we also used the [names-dataset](https://github.com/philipperemy/name-dataset) Python library to reconstruct missing genres, as well as demographic data ([Our World in Data Population & Demography Explorer](https://ourworldindata.org/explorers/population-and-demography)) to analyze country-level representation in films. We also scaled the box office according to the value of the dollars at the year of interest based on the [Consumers Price Index](https://fred.stlouisfed.org/series/CPIAUCNS#0).
+A dataset associating the country with its code (FRA for France, etc) is used for the interactive plot of the map of the world. It can be found on this [github](https://github.com/johan/world.geo.json/tree/master).
 
 
 
 ## Methods & Tasks
 
-### Task 1 : Data understanding - cleaning - reconstruction
-1. As the first task is always understanding the data, we start by describing it and do a rough analysis to reveal outliers,
-missing values or whatever seems strange about it. This was done by merging both datasets (movies+characters),
-and then treating it to manage different data types.
-2. This basic analysis leads us to the cleaning part, where we have to filter incoherent values.
-For example, we can cite the fact that there are actors measuring up to 510m high,
-or movie duration up to 1.9 years. So we decided to filter the data, based on common outliers,
-such as the tallest man on Earth. 
-3. After this cleaning part, the reconstruction part starts and we reconstruct actor gender based on the Facebook leak mentioned above.
-We also treated NaN values at this point. 
-4. Finally, another rough analysis is needed to check what changed in the data during cleaning and reconstruction,
-and if the treated data are representative of the original rough data.
+### Task 1 : Data understanding - cleaning - reconstruction (P2)
+1. Data understanding: We began by merging the movie and character datasets to explore the data and conduct a rough analysis. This step aimed to identify outliers, missing values, or other anomalies in the data.
+2. Data cleaning: During this analysis, we identified and filtered out incoherent values, such as actors with heights up to 510m or movies lasting 1.9 years. These "impossible" values were removed to ensure data integrity.
+3. Data Reconstruction: Missing actor gender information was reconstructed using a gender inference process based on the Facebook dataset. By analyzing actor names, genders were associated with a certainty threshold of 0.85.  
 
-### Task 2 : Research questions & naive analysis - visualizations
-1. Now that we understand the data well, and that we have a usable dataset,
-we go deeper into the research questions, and develop more on what data story we want to tell. 
-2. This also leads us to a first analysis where we analyze our data globally,
-using two variables, the proportion of women and time.
-This allows us to create plots and conduct statistical tests (such as t-tests) to see if there has been any change.
-3. Next we conduct a more specific analysis by exploring changes into certain categories,
-such as the evolution of the proportion of women over time by region or by film genre and then conduct statistical tests. 
+### Task 2 : additionnal treatments of the data and first plots
+1. We grouped the countries per region using the **country_to_region** function, that associates the country given to the region containing this country in its list for the spatial analysis.
+2. Because of the large number of movie genres and the different genres associated to each movies, we did clustering to associate movies that have similar genres by "exploding" the genre list of each movie in a dataframe and treating them as features to cluster movies with close enough features together (the number of clusters was chosen according to the silouhette score and the SSE). A heatmap of the aggregated genres for each cluster was plotted to visualize which genres were dominant in each cluster. This allowed us to understand the distribution of genres across clusters.
+3. The sizes of actors are rescaled for each gender based on the mean height of men and women respectively.
+4. The box office is also rescaled in order to have comparable prices for different epochs. It was done by using the [CPI dataset](https://fred.stlouisfed.org/series/CPIAUCNS#0) and the following formula : 
+ Price<sub>scaled</sub> = (Price<sub>X</sub> / CPI<sub>X</sub>) × CPI<sub>1984</sub>
+5. We plot the proportion of male and female across the years to have a first idea about the evolution. 
+6. With the new genres obtained by clustering, we plot the distribution of male and female per genre. 
 
-### Task 3 : Matching and balancing data 
-1. Subsequently, our data are likely biased, so we could perform linear regressions with as many covariates as possible,
-in order to calculate the propensity score, which allows us to compute a similarity index.
-We would have then two categories, men and women, which could need to be matched.
-This way we deal with the observable covariates which makes our analysis unbiased (except unobservable covariates). 
-2. Next, we need to check if the covariates are balanced between the two groups,
-which can be done using histograms and boxplots. If the balance is confirmed,
-the analysis can be conducted; if not,
-the process in the previous point should re-run and adjust certain variables in the matching process to end up with a balanced dataset.
+### Task 3 : Spatial analysis
+This section describes the spatial analysis conducted in the project. The analysis is based on two datasets:
 
-### Task 4 : Final conclusions and prediction
-1. Finally, we repeat initial naive analysis conducted in Task 2,
-but with unbiased and balanced data, this will lead to unbiased conclusions. 
-2. As a cherry on top, we can try to build an ML model using regression to predict the future proportion of women in movies depending on its characteristics.
-Cross-Validation will be performed at this stage to test the quality of our model,
-and ROC curves can be used to assess the performance of the model. 
+**`data_cleaned_countries.csv` (df):** derived from the original dataset.
+**`female_population_prop.csv` (df2):** got from Our World in Data, containing the proportion of female actors in the population of a given country for each year from 1950 to 2020.
+
+1. A column `Generation` is added to the `df` dataset to classify movies into generations. Generations are defined as 25-year periods starting from 1900 up to 2020 (last one spans only 20 years).
+2. ISO codes are added to `df` using a JSON file containing a world country map. The JSON file is taken from the [Johan World GeoJSON GitHub repo](https://github.com/johan/world.geo.json/tree/master).
+3. Using `df2`, the average proportion of females in the population (`F_prop_population`) is calculated for each country and generation by averaging the proportion over the years of the given generation.
+4. Female proportions in movies (`F_prop_movies`) are computed for each generation and region/country using the `get_proportion()` function.
+5. The datasets are merged to create a combined dataset with the following columns: `Country`, `ISO`, `F_prop_population`, `F_prop_movies`
+6. A representativity index is calculated using the formula:
+Representativity = ((F<sub>prop_movies</sub> / F<sub>prop_population</sub>) - 1). 
+Positive index means overrepresentation of female actors in movies compared to their proportion in population while negative index means an underrepresentation.
+7. For countries with sufficient data over three generations (1950–1975, 1975–2000, 2000–2020), the net evolution of representativity is calculated. It's the representativity of the last generation minus the one of the first generation.
+8. Using the JSON file, a world map is plotted with four layers: one layer for each generation and one layer showing the net evolution of representativity.
+
+### Task 4 : Biases analysis
+1. In order to perform a logistic regression, we want to analyze the possible biases. Therefore, we illustrated some boxplots of characteristics that could be biases, separating for male and female, to see if there is a significative difference between the two groups. These boxplots work for the numerical values, such as the released year, the box office, the runtime, the actor height and the age. 
+2. For categorical features, we already plotted the analysis per movie genre and per region, which allows us to consider them as biases.
+
+### Task 5 : Matching and balancing genders 
+1. Logistic regression and propensity score calculation: we build a logistic regression model using the **statsmodels** library to calculate propensity scores for each actor. The calculated propensity scores are stored.
+2. Quantifying uncertainty: we extract the model coefficients, p-values, standard errors, and confidence intervals to assess the significance of features. Coefficients with 95% CI are visualized to interpret the model results.
+3. Grouping and matching by propensity score: actors are grouped by name, and the mean propensity score is calculated for each actor to keep one occurence of each actor. Male and female actors are then matched based on their propensity scores using a graph-matching algorithm.
+4. Reconstructing features: after matching, the script reconstructs the dataset to include only matched actors. This ensures that the subsequent analysis is performed on balanced groups.
+5. Visualization: density plots are generated to compare apparition counts by gender before and after matching. These plots provide a visual representation of gender distribution changes due to matching.
+6. Statistical testing for gender representation: a t-test is conducted to assess whether there is a statistically significant difference in apparition counts between male and female actors after matching.
+
+### Task 6 : Matching and balancing movies with balanced and unbalanced casts in gender
+1. Data Preparation:
+- Feature selection: we identify the useful numerical and categorical features for this regression (movie features only).
+- Dataset aggregation: we grouped the dataset by movie name, summing columns to calculate the proportion of male actors and restoring counts for each movie.
+- Balanced classification: we created a new column "Balanced" to indicate whether the movie's gender proportion falls within a predefined range (±0.15 from 50%).
+2. Logistic regression for propensity score calculation: we build a logistic regression model to compute propensity scores for movies based on selected features.
+Extracted and visualized model coefficients, p-values, and confidence intervals to interpret feature importance.
+3. Matching balanced and unbalanced movies: used a graph-based matching algorithm to pair balanced and unbalanced movies with similar propensity scores.
+Evaluated matching quality by the number of successful matches.
+4. Visualizing box office revenue distribution: 
+- Before matching: density plots to compare box office revenues for balanced and unbalanced movies.
+- After matching: now that we have comparable groups of movies, we re-plot the box office revenue distributions for the matched groups.
 
 
-## Proposed timeline & Organization
+## Organization
 
-#### Until 10.11.24
-- Task 1:
-    - 1.1: Baptiste & Etienne 
-    - 1.2: Adélaïde & Thomas
-    - 1.3: Baptiste
-    - 1.4: Léo
-#### Until 15.11.24
-- Milestone P2:
-    - Readme: Baptiste, Etienne & Adélaïde
-- Task 2:
-    - 2.1: All
-    - 2.2: Thomas & Adélaïde
-    - 2.3: Etienne
-#### Until 20.12.24
-- Task 3:
-    - 3.1: Etienne & Baptiste
-    - 3.2: Léo, Thomas & Adélaïde
-- Task 4: All
-
-## Questions for TAs
-
-- We didn’t find any information in the readme about which genre is the principal genre,
-we only have a list of genres, can we assume that the first genre of the list is the main genre to do our analysis?
-- We think for e.g. that ethnicity of the actors may induce some biases, but there are a lot of missing values for the ethnicity.
-Is it mandatory to drop the NaN for these features ? Or is it possible to keep these values for the analysis ?
+- Thomas : final preprocessing of the data, biases analysis, merging notebook with coherence and clarity
+- Etienne : analysis by genre, running tests, matching for genders number of roles
+- Baptiste : clustering the genres, preparing the final presentation website 
+- Léo : spatial analysis, interactive plots
+- Adélaïde : gender proportion across time, matching for movies
+All members have equally participate to the project and multiple meeting have been planned each week to discuss about each member's work. 
