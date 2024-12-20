@@ -58,9 +58,10 @@ This section describes the spatial analysis conducted in the project. The analys
 5. The datasets are merged to create a combined dataset with the following columns: `Country`, `ISO`, `F_prop_population`, `F_prop_movies`
 6. A representativity index is calculated using the formula:
 Representativity = ((F<sub>prop_movies</sub> / F<sub>prop_population</sub>) - 1)
+
 Positive index means overrepresentation of female actors in movies compared to their proportion in population while negative index means an underrepresentation.
-7. For countries with sufficient data over three generations (1950–1975, 1975–2000, 2000–2020), the net evolution of representativity is calculated. It's the representativity of the last generation minus the one of the first generation.
-8. Using the JSON file, a world map is plotted with four layers: one layer for each generation and one layer showing the net evolution of representativity.
+8. For countries with sufficient data over three generations (1950–1975, 1975–2000, 2000–2020), the net evolution of representativity is calculated. It's the representativity of the last generation minus the one of the first generation.
+9. Using the JSON file, a world map is plotted with four layers: one layer for each generation and one layer showing the net evolution of representativity.
 
 ### Task 4 : Biases analysis
 1. In order to perform a logistic regression, we want to analyze the possible biases. Therefore, we illustrated some boxplots of characteristics that could be biases, separating for male and female, to see if there is a significative difference between the two groups. These boxplots work for the numerical values, such as the released year, the box office, the runtime, the actor height and the age. 
