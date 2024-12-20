@@ -69,3 +69,19 @@ def get_gender(name : str) -> str:
             gender = 'Unknown' #when there is a doubt on the gender, we replace it by unknown.
 
         return gender
+    
+    
+def data_preparation(data:pd.DataFrame) -> pd.DataFrame:
+    """
+    Arg:
+        data (DataFrame): the data we want to treat
+    """
+    #Replace the problematic caracters of the columns
+    data.columns = data.columns.str.replace(" ", "")
+    data.columns = data.columns.str.replace("-", "_")
+    data.columns = data.columns.str.replace("&", "")
+    #Only keep existing values
+    data = data.dropna()
+    #Reset to a knew index
+    data.reset_index(drop=True, inplace=True)
+    return data
