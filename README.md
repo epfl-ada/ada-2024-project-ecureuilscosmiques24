@@ -24,10 +24,15 @@ Here is the website of our [datastory](https://baptistecarmier.github.io/)
 
 ## Additional datasets
 
-For this project we mainly used the [CMU Movie Summary Corpus](https://www.cs.cmu.edu/~ark/personas/), which contains 42,306 movie plot summaries, sourced from Wikipedia. It also provides metadata for each movie such as title, release years, box office revenue, etc. The dataset also includes characters' characteristics and actors' labels such as gender, age, ethnicity, etc.
+- The [CMU Movie Summary Corpus](https://www.cs.cmu.edu/~ark/personas/) is a dataset focused on movies and character analysis. It includes 42,306 movie plot summaries sourced from Wikipedia. It also provides metadata for each movie: box office revenue, genre, release date, runtime, and language. The dataset also includes characters' characteristics, and actors' labels such as gender, estimated age at the time of the movie's release, actor date of birth, actor name, and more.
 
-In parallel, we also used the [names-dataset](https://github.com/philipperemy/name-dataset) Python library to reconstruct missing genres, as well as demographic data ([Our World in Data Population & Demography Explorer](https://ourworldindata.org/explorers/population-and-demography)) to analyze country-level representation in films. We also scaled the box office according to the value of the dollars at the year of interest based on the [Consumers Price Index](https://fred.stlouisfed.org/series/CPIAUCNS#0).
-A dataset associating the country with its code (FRA for France, etc) is used for the interactive plot of the map of the world. It can be found on this [github](https://github.com/johan/world.geo.json/tree/master).
+- name-dataset: To address missing gender information, we use the names-dataset Python library, sourced from a GitHub repository ([here](https://github.com/philipperemy/name-dataset)). Based on a Facebook leak, it provides likely gender classifications for first names, helping us infer actors' genders as male or female. Install it via: pip install names-dataset.
+
+- To analyze country-level gender representation in films, we use demographic data from the [Our World in Data Population & Demography Explorer](https://ourworldindata.org/explorers/population-and-demography). This dataset provides the male and female population for selected countries from 1950 to 2023, enabling us to compare movie industry gender representation with actual demographic distributions.
+
+- We used the CPI.csv dataset, as the price of the box office needed to be rescaled according to the value of the dollar at the year of interest. It is sourced from [Consumer Price Index for All Urban Consumers: All Items in U.S. City Average (CPIAUCNS) - FRED - St. Louis Fed](https://fred.stlouisfed.org/series/CPIAUCNS#0), which sources data from the US Bureau of Labor Statistics. This dataset contains the Consumer Price Index for the years between 1913 and 2024, adjusted to 1982-1984 as the base years.
+
+- A dataset associating the country with its code (FRA for France, etc.) is used for the interactive plot of the map of the world. It can be found on this [repository](https://github.com/johan/world.geo.json/tree/master).
 
 
 
@@ -97,4 +102,5 @@ Evaluated matching quality by the number of successful matches.
 - Baptiste : clustering the genres, preparing the final presentation website 
 - Léo : spatial analysis, interactive plots
 - Adélaïde : gender proportion across time, matching for movies
-All members have equally participate to the project and multiple meeting have been planned each week to discuss about each member's work. 
+
+All members have equally participate to the project and multiple meeting have been planned each week to discuss about each member's work.
