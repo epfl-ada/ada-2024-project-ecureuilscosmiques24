@@ -80,10 +80,10 @@ def get_gender(name : str) -> str:
 def country_to_region(country):
     """
     Associate a defined region to a country
-    Input:
-    country: string
-    Output:
-    region: string
+    Args:
+        country: string
+    Returns:
+        region: string
     """
     # Define lists for each region
     north_america = ["united states of america", "canada", "puerto rico", "mexico", "bahamas", "costa rica"]
@@ -129,8 +129,8 @@ def extract_numerical_categorical_features(data:pd.DataFrame, exclude_col:list):
     """
     Extract the categorical and numerical features of a dataset whith some excluded columns
     Args:
-    data: the dataframe
-    label: the label we do not want to import
+        data: the dataframe
+        label: the label we do not want to import
     """
     numerical_features = [key for key, value in data.dtypes.items() if value=="float64" and key not in exclude_col]
     print(f"Numerical features: {numerical_features}")
@@ -146,13 +146,13 @@ def plot_sse(features_X, start=2, end=10):
     """
     Plot the sum of the squared errors
 
-    Input:
-    features
-    start: min k values
-    end: maximum k value
+    Args:
+        features
+        start: min k values
+        end: maximum k value
 
-    Output:
-    matplotlib.object
+    Returns:
+        matplotlib.object
     """
     sse = []
     for k in range(start, end):
@@ -175,9 +175,9 @@ def min_max_scaling(data):
     """
     Set the maximum of the data to 1 and the minimum to 0
     Args:
-    data: the data we want to scale
+        data: the data we want to scale
     Returns
-    scaled_data
+        scaled_data
     """
     data_max = np.max(data)
     data_min = np.min(data)
@@ -194,6 +194,16 @@ def compute_similarity(prop1,prop2):
 
 
 def write_formula(label:str, numerical_features:list, categorical_features:list, exclude_cat:str = "Region") -> str:
+    """
+    Write a formula for logistic regressions
+
+    Args:
+
+    Returns:
+        formula_reg: the final formula
+
+    """
+    
     formula_reg = [" + C("+cat+")" for cat in categorical_features if exclude_cat not in cat]
     formula_reg = label + " ~ "
     for i,num in enumerate(numerical_features):
@@ -208,7 +218,14 @@ def write_formula(label:str, numerical_features:list, categorical_features:list,
     return formula_reg
 
 
-def gen25(year):
+def gen25(year:int) -> str:
+    """
+    Group the dates into generations
+
+    Args: the year
+
+    Returns: the generation
+    """
     if 1900<year<=1925:
         return "1900-1925"
     if 1925<year<=1950:
@@ -219,3 +236,42 @@ def gen25(year):
         return "1975-2000"
     if 2000<year<= 2025:
         return "2000-2020"
+
+
+def get_proportion(df, scale, threshold, order):
+    """
+
+    Args:
+        df: the dataset
+        scale: either 'Region' or 'Main_country'
+        threshold: put a NaN instead of the proportion if there is not enough movies for that case
+        order: order of the generations
+
+    Returns:
+        proportions
+    """
+    df = df[df['Region'] != "Dead country"] #remove dead countries
+    total_counts = pd.crosstab(df['Generation'], df[scale])
+    female_counts = pd.crosstab(df[df['Actor_gender_male'] == 0]['Generation'], 
+                                df[df['Actor_gender_male'] == 0][scale])
+    mask = total_counts < threshold
+    proportions = female_counts / total_counts
+    proportions = proportions.mask(mask, other=np.nan)
+    proportions = proportions.reindex(order)
+    return proportions
+
+
+def data_preparation(data:pd.DataFrame) -> pd.DataFrame:
+    """
+    Arg:
+        data (DataFrame): the data we want to treat
+    """
+    #Replace the problematic caracters of the columns
+    data.columns = data.columns.str.replace(" ", "")
+    data.columns = data.columns.str.replace("-", "_")
+    data.columns = data.columns.str.replace("&", "")
+    #Only keep existing values
+    data = data.dropna()
+    #Reset to a knew index
+    data.reset_index(drop=True, inplace=True)
+    return data
